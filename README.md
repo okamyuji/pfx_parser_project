@@ -14,14 +14,14 @@
 
 ### 手順
 
-1. **リポジトリのクローン:**
+1. **リポジトリのクローン**
 
     ```bash
     git clone https://github.com/okamyuji/pfx_parser_project.git
     cd pfx_parser_project
     ```
 
-2. **仮想環境の作成と有効化:**
+2. **仮想環境の作成と有効化**
 
     ```bash
     python -m venv venv
@@ -29,7 +29,7 @@
     # venv\Scripts\activate  # Windows
     ```
 
-3. **Python パッケージのインストール:**
+3. **Python パッケージのインストール**
 
     ```bash
     pip install -r requirements.txt
@@ -44,7 +44,7 @@
     pyOpenSSL  # cryptography で pfx を扱うために必要となる場合がある
     ```
 
-4. **Django アプリケーションの設定:**
+4. **Django アプリケーションの設定**
 
     `pfx_parser_project/settings.py`、`pfx_parser_app/apps.py`、`pfx_parser_app/urls.py`、`pfx_parser_app/views.py` は、このリポジトリに初期設定済みのものが含まれています。必要に応じて設定を調整してください。
 
@@ -53,7 +53,7 @@
     - `pfx_parser_app/urls.py`:  API エンドポイント `/api/parse_pfx/` のルーティングが定義されています。
     - `pfx_parser_app/views.py`:  pfx/p12 ファイル解析処理を行う `parse_pfx` ビュー関数が実装されています。
 
-5. **マイグレーションの実行 (必要に応じて):**
+5. **マイグレーションの実行 (必要に応じて)**
 
     このプロジェクトではデータベースを使用しませんが、Django の基本的な設定としてマイグレーションが必要となる場合があります。
 
@@ -71,7 +71,7 @@ python manage.py test pfx_parser_app.tests
 
 ## API の実行方法
 
-1. **Django 開発サーバーの起動:**
+1. **Django 開発サーバーの起動**
 
     ```bash
     python manage.py runserver
@@ -79,26 +79,26 @@ python manage.py test pfx_parser_app.tests
 
     サーバーは `http://127.0.0.1:8000/` で起動します。
 
-2. **API リクエストの送信 (curl コマンド例):**
+2. **API リクエストの送信 (curl コマンド例)**
 
     p12 ファイルを送信してユーザーIDを取得するには、以下の curl コマンドを実行します。
 
-    **パスワードなしの p12 ファイルの場合:**
+    **パスワードなしの p12 ファイルの場合**
 
     ```bash
-    curl -X POST -F "file=@/path/to/your/certificate.p12" http://127.0.0.1:8000/api/parse_pfx/
+    curl -X POST -F "file=@/path/to/your/certificate.p12" "http://127.0.0.1:8000/api/parse_pfx/"
     ```
 
-    **パスワード付きの p12 ファイルの場合:**
+    **パスワード付きの p12 ファイルの場合**
 
     ```bash
-    curl -X POST -F "file=@/path/to/your/certificate.p12" -F "password=your_password" http://127.0.0.1:8000/api/parse_pfx/
+    curl -X POST -F "file=@/path/to/your/certificate.p12" -F "password=your_password" "http://127.0.0.1:8000/api/parse_pfx/"
     ```
 
     - `/path/to/your/certificate.p12` は、実際の p12 ファイルのパスに置き換えてください。
     - `your_password` は、p12 ファイルに設定したパスワード (パスワード付きの場合) に置き換えてください。
 
-    **成功した場合のレスポンス例:**
+    **成功した場合のレスポンス例**
 
     ```json
     {"user_id": "testuser"}
@@ -110,13 +110,13 @@ python manage.py test pfx_parser_app.tests
 
 開発・テスト用にパスワード付き p12 ファイル (`output.p12`) を作成する手順を以下に示します。事前に OpenSSL がインストールされている必要があります。
 
-1. **秘密鍵の生成 (`private.key`):**
+1. **秘密鍵の生成 (`private.key`)**
 
     ```bash
     openssl genrsa -out private.key 2048
     ```
 
-2. **証明書署名要求 (CSR) の作成 (`private.csr`):**
+2. **証明書署名要求 (CSR) の作成 (`private.csr`)**
 
     ```bash
     openssl req -new -key private.key -out private.csr
@@ -144,13 +144,13 @@ python manage.py test pfx_parser_app.tests
     An optional company name []: # オプションの会社名 (任意、通常は空欄でEnter)
    ```
 
-3. **自己署名証明書の生成 (`certificate.crt`):**
+3. **自己署名証明書の生成 (`certificate.crt`)**
 
     ```bash
     openssl x509 -req -in private.csr -signkey private.key -out certificate.crt -days 365
     ```
 
-4. **p12 ファイルの作成 (`output.p12`):**
+4. **p12 ファイルの作成 (`output.p12`)**
 
     ```bash
     openssl pkcs12 -export -out output.p12 -inkey private.key -in certificate.crt -passout pass:password123
