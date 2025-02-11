@@ -98,7 +98,7 @@ class PfxParserTests(TestCase):
             }, format='multipart')
         
         self.assertEqual(response.status_code, status.HTTP_400_BAD_REQUEST)
-        self.assertEqual(response.data['error'], 'pfx/p12ファイルの解析に失敗しました。')
+        self.assertEqual(response.data['error'], 'パスワードが間違っています。')
 
     def test_no_file_uploaded(self):
         response = self.client.post(self.url, {}, format='multipart')

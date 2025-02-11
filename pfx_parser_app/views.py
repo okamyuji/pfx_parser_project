@@ -12,7 +12,7 @@ import io
 @parser_classes([MultiPartParser])
 def parse_pfx(request):
     """
-    POSTリクエストで送信されたpfx/p12ファイルを解析し、CNからユーザーIDを抽出して返すAPIエンドポイント。
+    POSTリクエストで送信されたpfx/p12ファイルを解析し、CNからユーザーIDを抽出して返すAPIエンドポイント
     """
     print("request.FILES:", request.FILES)
     print("request.POST:", request.POST)
@@ -34,7 +34,7 @@ def parse_pfx(request):
         except ValueError as ve:
             error_message = str(ve)
             # パスワードエラーの場合の処理
-            if "bad password" in error_message.lower() or "bad decrypt" in error_message.lower():
+            if "invalid password" in error_message.lower():
                 return Response({'error': 'パスワードが間違っています。'}, status=status.HTTP_400_BAD_REQUEST)
             # その他のValueErrorは一般的な解析エラーとして扱う
             return Response({'error': 'pfx/p12ファイルの解析に失敗しました。'}, status=status.HTTP_400_BAD_REQUEST)
