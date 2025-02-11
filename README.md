@@ -86,16 +86,16 @@ python manage.py test pfx_parser_app.tests
     **パスワードなしの p12 ファイルの場合**
 
     ```bash
-    curl -X POST -F "file=@/path/to/your/certificate.p12" "http://127.0.0.1:8000/api/parse_pfx/"
+    curl -X POST -F "file=@/path/to/your/output.p12" "http://127.0.0.1:8000/api/parse_pfx/"
     ```
 
     **パスワード付きの p12 ファイルの場合**
 
     ```bash
-    curl -X POST -F "file=@/path/to/your/certificate.p12" -F "password=your_password" "http://127.0.0.1:8000/api/parse_pfx/"
+    curl -X POST -F "file=@/path/to/your/output.p12" -F "password=your_password" "http://127.0.0.1:8000/api/parse_pfx/"
     ```
 
-    - `/path/to/your/certificate.p12` は、実際の p12 ファイルのパスに置き換えてください。
+    - `/path/to/your/output.p12` は、実際の p12 ファイルのパスに置き換えてください。
     - `your_password` は、p12 ファイルに設定したパスワード (パスワード付きの場合) に置き換えてください。
 
     **成功した場合のレスポンス例**
