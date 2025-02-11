@@ -26,17 +26,21 @@ def parse_pfx(request):
         pfx_data = pfx_file.read()
         pfx_password_bytes = pfx_password.encode('utf-8') if pfx_password else None
 
-        # pfx/p12ファイルをロード (パスワードが不要な場合もあるので、try-exceptで対応)
+        # pfx/p12ファイルをロード
         try:
             pkcs12_bundle = pkcs12.load_key_and_certificates(
                 pfx_data, pfx_password_bytes
             )
-        except ValueError:
-            return Response({'error': 'パスワードが間違っています。'}, status=status.HTTP_400_BAD_REQUEST)
+        except ValueError as ve:
+            error_message = str(ve)
+            # パスワードエラーの場合の処理
+            if "bad password" in error_message.lower() or "bad decrypt" in error_message.lower():
+                return Response({'error': 'パスワードが間違っています。'}, status=status.HTTP_400_BAD_REQUEST)
+            # その他のValueErrorは一般的な解析エラーとして扱う
+            return Response({'error': 'pfx/p12ファイルの解析に失敗しました。'}, status=status.HTTP_400_BAD_REQUEST)
         except Exception as e:
-            pkcs12_bundle = pkcs12.load_key_and_certificates(
-                pfx_data, None
-            )
+            # パスワードなしで再試行する前に、一般的な解析エラーとして扱う
+            return Response({'error': 'pfx/p12ファイルの解析に失敗しました。'}, status=status.HTTP_400_BAD_REQUEST)
 
         # タプルから証明書を取得 (private_key, certificate, ca_certs)
         _, certificate, _ = pkcs12_bundle
